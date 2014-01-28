@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<script type="text/javascript" src="javascript/jquery-1.10.2.min.js"></script>
+
+<script src="javascript/d3.v3.js" charset="utf-8"></script>
+
+<script type="text/javascript" src="javascript/jquery.timer.js"></script>
+
+<script type="text/javascript" src="javascript/nv.d3.js"></script>
+
+
+<script type="text/javascript" src="javascript/d3_linewithfocuschart.js"></script>
+
+<script type="text/javascript" src="javascript/d3_test_footer.js"></script>
+
+<link rel="stylesheet" type="text/css" href="css/d3_test.css">
+
+<link rel="stylesheet" type="text/css" href="css/nv.d3.css">
+
+<meta charset=utf-8 />
+
+
+<title>lineWithFocusChart (D3 + NVD)</title>
+
+<style>
+
+body {
+  overflow-y:scroll;
+}
+
+text {
+  font: 12px sans-serif;
+}
+
+svg {
+  display: block;
+}
+
+#chart1 svg {
+  height: 500px;
+  width: 300px;
+  min-width: 50px;
+  min-height: 100px;
+/*
+  margin: 50px;
+  Minimum height and width is a good idea to prevent negative SVG dimensions...
+  For example width should be =< margin.left + margin.right + 1,
+  of course 1 pixel for the entire chart would not be very useful, BUT should not have errors
+*/
+}
+
+</style>
+
+</head>
+  
+  
+<body>
+ 
+<div id="chart" class='with-3d-shadow with-transitions'>
+    <svg style="height: 500px; width: 800px;"></svg>
+  </div>
+
+
+<br/>
+
+
+</body>
+
+
+</html>

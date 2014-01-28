@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<script type="text/javascript" src="javascript/jquery-1.10.2.min.js"></script>
+ 
+<script src="javascript/d3.v3.js" charset="utf-8"></script>
+
+<script type="text/javascript" src="javascript/jquery.timer.js"></script>
+
+<script type="text/javascript" src="javascript/d3_barplot.js"></script>
+
+
+
+<link rel="stylesheet" type="text/css" href="css/d3_test.css"></link>
+
+
+<title>Bar Plot (D3)</title>
+  
+</head>
+  
+  
+<body>
+ 
+<div id="tooltip" class="hidden">
+        <p><strong>Percentage of Max Value</strong></p>
+        <p><span id="value">100</span>%</p>
+</div>
+
+<p id="barplot_controller">Click me for Barplot Control (D3). Max value: <div id="maxvalue"></div>
+<input type="text" name="newmax" id="newmax" maxlength="70">
+<button id="updatemax" type="button">Update new Max!</button>
+</p>
+
+
+<p><a href="../chart/barplot">Initial Data API</a></p>
+
+<p><a href="../chart/barplot/update/UP_LIMIT">Update Data API</a></p>
+
+
+<br></br>
+
+
+</body>
+
+
+</html>
