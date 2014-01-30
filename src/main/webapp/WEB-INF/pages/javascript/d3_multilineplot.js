@@ -35,6 +35,10 @@ var keyDatetime = function(d)
 };
 
 var initialData;
+var initialDataInArray;
+var dsarray;
+var datetimearray;
+var measarray;
 
 /*
  * get updated data from RESTful and change HTML element accordingly 
@@ -52,13 +56,29 @@ var refreshLineData = function()
     data_update_request.done(function(updateData)
     {
         updateData = updateData.pointMap;
-        updateData.datetime = parseJSONDate(updateData.datetime);
 
         // update initialData size
-        initialData.push(
-        {
-            datetime : updateData.datetime,
-            value : updateData.value
+        $.each(updateData, function(key, value) {
+        	
+            value.measurement.forEach(function(d) {
+            	d.datetime = parseJSONDate(d.datetime);
+            	datetimearray.push(d.datetime);
+            	measarray.push(d.value);
+            });
+            
+            initialDataInArray.forEach(function(d) {
+        		if(key == d.dataSeriesName) {
+        			value.measurement.forEach(function(dd){
+        				d.measurement.push({
+            				datetime: dd.datetime,
+            				value: dd.value
+            			});
+        			});
+        			
+        		} else {
+        			// not hit
+        		}
+        	});
         });
 
         // update axis and line plot
@@ -68,15 +88,8 @@ var refreshLineData = function()
         var svg = d3.select("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-        xScale.domain(d3.extent(initialData, function(d)
-        {
-            return d.datetime;
-        }));
-
-        yScale.domain(d3.extent(initialData, function(d)
-        {
-            return d.value;
-        }));
+        xScale.domain(d3.extent(datetimearray));
+        yScale.domain(d3.extent(measarray));
         
         // update axis
         xAxis.scale(xScale).orient("bottom");
@@ -87,7 +100,24 @@ var refreshLineData = function()
 //        svg.selectAll("g.x.axis").call(xAxis);
 //        svg.selectAll("g.y.axis").call(yAxis);
         
-        svg.selectAll("#path-id").datum(initialData).attr("class", "line").attr("d", line);
+//        multiline = svg.selectAll(".multiline")
+//    		.data(initialDataInArray)
+//    		.enter().append("g")
+//    		.attr("class", "multiline");
+//
+//        multiline.append("path").attr("id", function(d) { return "path-id-" + d.dataSeriesName; })
+//    		.attr("class", "line")
+//    		.attr("d", function(d) { return line(d.measurement); })
+//    		.style("stroke", function(d) { return color(d.dataSeriesName); });
+        
+        initialDataInArray.forEach(function(d) {
+        	var lineId = "#path-id-" + d.dataSeriesName; 
+        	svg.selectAll(lineId)
+        		.attr("class", "line").attr("d", function(d) { return line(d.measurement); });
+        });
+    
+        // draw line
+//        svg.selectAll("#path-id").datum(initialData).attr("class", "line").attr("d", line);
 
     });
 };
@@ -103,43 +133,50 @@ $(document).ready(
             // ---------------- start of JQuery ready ----------------
 
             // start the timer
-//            lineTimer.set(
-//            {
-//                time : timerMillSecond,
-//                autostart : true
-//            });
+            lineTimer.set(
+            {
+                time : timerMillSecond,
+                autostart : true
+            });
 
             // prepare SVG
-
+        	
             var svg = d3.select("body").append("svg").attr("id", "multilineplot_svg_id").attr("width", width + margin.left + margin.right).attr("height", height + margin.top + margin.bottom).append(
                     "g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
             
             // load data
             data_update_request = $.ajax(
             {
-                url : "../chart/multiserieslineplot/",
+                url : "../chart/multiserieslineplot",
                 type : "GET",
             });
 
             data_update_request.done(function(da)
             {
                 initialData = da.pointMap;
-
-                color.domain(d3.keys(initialData.length);
                 
-                initialData.forEach(function(d)
-                {
-                    d.datetime = parseJSONDate(d.datetime);
+                // initial data in array
+                initialDataInArray = [];
+                dsarray = [];
+                datetimearray = [];
+                measarray = [];
+                		
+                $.each(initialData, function(key, value) {
+                    dsarray.push(key);
+                    initialDataInArray.push(value);
+                    
+                    value.measurement.forEach(function(d) {
+                    	d.datetime = parseJSONDate(d.datetime);
+                    	datetimearray.push(d.datetime);
+                    	measarray.push(d.value);
+                    });
                 });
+                
+                // set color
+                color.domain(dsarray);
 
-                xScale.domain(d3.extent(initialData, function(d)
-                {
-                    return d.datetime;
-                }));
-                yScale.domain(
-                    d3.min(initialData, function(c) { return d3.min(c.measurement, function(v) { return v.value; }); }),
-                    d3.max(initialData, function(c) { return d3.max(c.measurement, function(v) { return v.value; }); })    
-                );
+                xScale.domain(d3.extent(datetimearray));
+                yScale.domain(d3.extent(measarray));
              
                 /*
                  * plot gridline
@@ -153,8 +190,27 @@ $(document).ready(
                 svg.append("g").attr("id", "y-axis-id").attr("class", "y axis").call(yAxis).append("text").attr("transform", "rotate(-90)").attr("y", 6).attr("dy", ".71em").style(
                         "text-anchor", "end").text("Measurement (in)");
 
+                // draw multi-lines
+                var multiline = svg.selectAll(".multiline")
+                	.data(initialDataInArray)
+                	.enter().append("g")
+                	.attr("class", "multiline");
+
+                multiline.append("path").attr("id", function(d) { return "path-id-" + d.dataSeriesName; })
+                	.attr("class", "line")
+                	.attr("d", function(d) { return line(d.measurement); })
+                	.style("stroke", function(d) { return color(d.dataSeriesName); });
+
+                multiline.append("text")
+                	.datum(function(d) { return {dname: d.dataSeriesName, dvalue: d.measurement[d.measurement.length - 5]}; })
+                	.attr("transform", function(d) { return "translate(" + xScale(d.dvalue.datetime) + "," + yScale(d.dvalue.value) + ")"; })
+                	.attr("x", 3)
+                	.attr("dy", ".35em")
+                	.text(function(d) { return d.dname; });
+            
                 // draw line
-                svg.append("path").attr("id", "path-id").datum(initialData).attr("class", "line").attr("d", function(d){return line(d.measurement)} ).style("stroke", function(d) { return color(d.dataSeriesName); });
+//                svg.append("path").attr("id", "path-id").datum(initialData).attr("class", "line")
+//                .attr("d", function(d){return line(d.measurement)} ).style("stroke", function(d) { return color(d.dataSeriesName); });
                 
                 // load footer
                 $.getScript("javascript/d3_test_footer.js");

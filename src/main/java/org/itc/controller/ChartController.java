@@ -30,7 +30,7 @@ public class ChartController
     private Date currentLineDate = new Date();
     private int currentLineValue = 10;
 
-    private String STRAIN_GAUGE = "Strain Gauge";
+    private String STRAIN_GAUGE = "StrainGauge";
     private String FORCE = "Force";
     private String PRESSURE = "Pressure";
 
