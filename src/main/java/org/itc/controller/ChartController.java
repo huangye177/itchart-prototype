@@ -32,7 +32,7 @@ public class ChartController
 
     private String STRAIN_GAUGE = "StrainGauge";
     private String FORCE = "Force";
-    private String PRESSURE = "Pressure";
+    private String PRESSURE = "Pressure-B";
 
     @RequestMapping(value = "/chart/barplot", method = RequestMethod.GET)
     public @ResponseBody
@@ -301,6 +301,7 @@ public class ChartController
 
         int dayBefore = 30;
         int max = 100;
+        int max2 = 1000;
 
         calendar.setTime(nowDate);
         calendar.add(Calendar.DAY_OF_YEAR, (-1 * dayBefore));
@@ -313,12 +314,12 @@ public class ChartController
             this.currentLineDate = calendar.getTime();
 
             int value1 = (int) (max - Math.floor(Math.random() * max));
-            int value2 = (int) (Math.floor(Math.random() * max));
-            int value3 = (int) (max + Math.floor(Math.random() * max));
+            int value2 = (int) (max + Math.floor(Math.random() * max));
+            int value_big = (int) (Math.floor(Math.random() * max2));
 
             multiDSPlot.getPointMap().get(STRAIN_GAUGE).getMeasurement().add(new Measurement(dateFormat.format(this.currentLineDate), value1));
             multiDSPlot.getPointMap().get(FORCE).getMeasurement().add(new Measurement(dateFormat.format(this.currentLineDate), value2));
-            multiDSPlot.getPointMap().get(PRESSURE).getMeasurement().add(new Measurement(dateFormat.format(this.currentLineDate), value3));
+            multiDSPlot.getPointMap().get(PRESSURE).getMeasurement().add(new Measurement(dateFormat.format(this.currentLineDate), value_big));
 
         }
 
@@ -344,14 +345,85 @@ public class ChartController
         this.currentLineDate = calendar.getTime();
 
         int max = 100;
+        int max2 = 1000;
 
         int value1 = (int) (max - Math.floor(Math.random() * max));
-        int value2 = (int) (Math.floor(Math.random() * max));
-        int value3 = (int) (max + Math.floor(Math.random() * max));
+        int value2 = (int) (max + Math.floor(Math.random() * max));
+        int value_big = (int) (Math.floor(Math.random() * max2));
 
         multiDSPlot.getPointMap().get(STRAIN_GAUGE).getMeasurement().add(new Measurement(dateFormat.format(this.currentLineDate), value1));
         multiDSPlot.getPointMap().get(FORCE).getMeasurement().add(new Measurement(dateFormat.format(this.currentLineDate), value2));
-        multiDSPlot.getPointMap().get(PRESSURE).getMeasurement().add(new Measurement(dateFormat.format(this.currentLineDate), value3));
+        multiDSPlot.getPointMap().get(PRESSURE).getMeasurement().add(new Measurement(dateFormat.format(this.currentLineDate), value_big));
+
+        return multiDSPlot;
+
+    }
+    
+    // Multi-Axis Multi-Series LinePlot
+
+    @RequestMapping(value = "/chart/multiaxisserieslineplot", method = RequestMethod.GET)
+    public @ResponseBody
+    MultiseriesLinePlotModel getMultiAxisSeriesLinePlotInJSON()
+    {
+        // prepare all dataseries
+        MultiseriesLinePlotModel multiDSPlot = new MultiseriesLinePlotModel("Multi-Series LinePlot");
+        multiDSPlot.addDataSeries(STRAIN_GAUGE, new SingleSeriesLinePlotModel(STRAIN_GAUGE, new ArrayList<Measurement>()));
+        multiDSPlot.addDataSeries(PRESSURE, new SingleSeriesLinePlotModel(PRESSURE, new ArrayList<Measurement>()));
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date nowDate = new Date();
+        Calendar calendar = Calendar.getInstance();
+
+        int dayBefore = 30;
+        int max = 100;
+        int max2 = 1000;
+
+        calendar.setTime(nowDate);
+        calendar.add(Calendar.DAY_OF_YEAR, (-1 * dayBefore));
+        Date startDate = calendar.getTime();
+
+        for (int i = 0; i < dayBefore; i++)
+        {
+            calendar.setTime(startDate);
+            calendar.add(Calendar.DAY_OF_YEAR, i);
+            this.currentLineDate = calendar.getTime();
+
+            int value1 = (int) (max - Math.floor(Math.random() * max));
+            int value_big = (int) (max2 - Math.floor(Math.random() * max2));
+
+            multiDSPlot.getPointMap().get(STRAIN_GAUGE).getMeasurement().add(new Measurement(dateFormat.format(this.currentLineDate), value1));
+            multiDSPlot.getPointMap().get(PRESSURE).getMeasurement().add(new Measurement(dateFormat.format(this.currentLineDate), value_big));
+
+        }
+
+        return multiDSPlot;
+
+    }
+
+    @RequestMapping(value = "/chart/multiaxisserieslineplot/update", method = RequestMethod.GET)
+    public @ResponseBody
+    MultiseriesLinePlotModel getMultiAxisSeriesPlotPointInJSON()
+    {
+        // prepare all dataseries
+        MultiseriesLinePlotModel multiDSPlot = new MultiseriesLinePlotModel("Multi-Series LinePlot");
+        multiDSPlot.addDataSeries(STRAIN_GAUGE, new SingleSeriesLinePlotModel(STRAIN_GAUGE, new ArrayList<Measurement>()));
+        multiDSPlot.addDataSeries(PRESSURE, new SingleSeriesLinePlotModel(PRESSURE, new ArrayList<Measurement>()));
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(this.currentLineDate);
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
+        this.currentLineDate = calendar.getTime();
+
+        int max = 100;
+        int max2 = 1000;
+
+        int value1 = (int) (max - Math.floor(Math.random() * max));
+        int value_big = (int) (max2 - Math.floor(Math.random() * max2));
+
+        multiDSPlot.getPointMap().get(STRAIN_GAUGE).getMeasurement().add(new Measurement(dateFormat.format(this.currentLineDate), value1));
+        multiDSPlot.getPointMap().get(PRESSURE).getMeasurement().add(new Measurement(dateFormat.format(this.currentLineDate), value_big));
 
         return multiDSPlot;
 

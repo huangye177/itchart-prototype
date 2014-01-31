@@ -23,7 +23,7 @@ var margin =
     right : 80,
     bottom : 30,
     left : 50
-}, width = 960 - margin.left - margin.right, height = 500 - margin.top - margin.bottom;
+}, width = 600 - margin.left - margin.right, height = 300 - margin.top - margin.bottom;
 
 // parse dates
 var parseDate = d3.time.format("%Y%m%d").parse;
