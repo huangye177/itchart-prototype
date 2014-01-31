@@ -4,7 +4,7 @@ var margin =
     right : 20,
     bottom : 30,
     left : 50
-}, width = 960 - margin.left - margin.right, height = 500 - margin.top - margin.bottom;
+}, width = 600 - margin.left - margin.right, height = 300 - margin.top - margin.bottom;
 
 var parseJSONDate = d3.time.format("%Y-%m-%d").parse;
 
@@ -97,28 +97,14 @@ var refreshLineData = function()
         
         svg.selectAll("#x-axis-id").call(xAxis);
         svg.selectAll("#y-axis-id").call(yAxis);
-//        svg.selectAll("g.x.axis").call(xAxis);
-//        svg.selectAll("g.y.axis").call(yAxis);
         
-//        multiline = svg.selectAll(".multiline")
-//    		.data(initialDataInArray)
-//    		.enter().append("g")
-//    		.attr("class", "multiline");
-//
-//        multiline.append("path").attr("id", function(d) { return "path-id-" + d.dataSeriesName; })
-//    		.attr("class", "line")
-//    		.attr("d", function(d) { return line(d.measurement); })
-//    		.style("stroke", function(d) { return color(d.dataSeriesName); });
-        
+        // draw line
         initialDataInArray.forEach(function(d) {
         	var lineId = "#path-id-" + d.dataSeriesName; 
         	svg.selectAll(lineId)
         		.attr("class", "line").attr("d", function(d) { return line(d.measurement); });
         });
     
-        // draw line
-//        svg.selectAll("#path-id").datum(initialData).attr("class", "line").attr("d", line);
-
     });
 };
 
@@ -201,17 +187,15 @@ $(document).ready(
                 	.attr("d", function(d) { return line(d.measurement); })
                 	.style("stroke", function(d) { return color(d.dataSeriesName); });
 
+                // draw line
                 multiline.append("text")
                 	.datum(function(d) { return {dname: d.dataSeriesName, dvalue: d.measurement[d.measurement.length - 5]}; })
                 	.attr("transform", function(d) { return "translate(" + xScale(d.dvalue.datetime) + "," + yScale(d.dvalue.value) + ")"; })
                 	.attr("x", 3)
+                	.style("stroke", function(d) { return color(d.dname); })
                 	.attr("dy", ".35em")
                 	.text(function(d) { return d.dname; });
             
-                // draw line
-//                svg.append("path").attr("id", "path-id").datum(initialData).attr("class", "line")
-//                .attr("d", function(d){return line(d.measurement)} ).style("stroke", function(d) { return color(d.dataSeriesName); });
-                
                 // load footer
                 $.getScript("javascript/d3_test_footer.js");
 
