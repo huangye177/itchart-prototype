@@ -3,6 +3,8 @@ itchart-prototype
 
 Checkout the alpha-status by simply executing following commands in your shell:
 
+NOITCE: please check file "gradle.properties" to enable/disable/change your proxy setting.
+
 =================
 
 git clone https://github.com/huangye177/itchart-prototype.git

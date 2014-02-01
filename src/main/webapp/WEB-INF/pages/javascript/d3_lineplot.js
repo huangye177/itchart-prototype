@@ -187,6 +187,12 @@ $(document).ready(
                 // draw line
                 svg.append("path").attr("id", "path-id").datum(initialData).attr("class", "line").attr("d", line);
                 
+                // on-click event
+                d3.select("#singleseries_lineplot_controller").on("click", function()
+                {
+                	testcontroler();
+                });
+                
                 // load footer
                 $.getScript("javascript/d3_test_footer.js");
 
@@ -195,3 +201,7 @@ $(document).ready(
             // ---------------- end of JQuery ready ----------------
 
         });
+
+var testcontroler =  function() {
+	console.log("hit.");
+}

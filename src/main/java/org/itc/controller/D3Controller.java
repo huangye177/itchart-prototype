@@ -15,4 +15,6 @@ public class D3Controller {
     public String showd3() {
         return "redirect:/pages/d3_barplot.html";
     }
+	
+	
 }
