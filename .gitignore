@@ -14,5 +14,5 @@ build
 .gradletasknamecache
 .groovy
 gradle-app.setting
-.svg
-.pdf
+*.svg
+*.pdf
