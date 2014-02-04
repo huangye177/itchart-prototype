@@ -10,6 +10,7 @@ var parseJSONDate = d3.time.format("%Y-%m-%d").parse;
 
 var timerMillSecond = 2000;
 var tickCount = 6;
+var allowDataUpdate = true;
 
 var xScale = d3.time.scale().range([ 0, width ]);
 
@@ -39,7 +40,11 @@ var initialData;
  */
 var refreshLineData = function()
 {
-
+	if(!allowDataUpdate) {
+		console.log("data update paused");
+		return;
+	}
+	
     // load update data
     data_update_request = $.ajax(
     {
@@ -137,7 +142,8 @@ $(document).ready(
 
             // prepare SVG
 
-            var svg = d3.select("body").append("svg").attr("id", "lineplot_svg_id").attr("width", width + margin.left + margin.right).attr("height", height + margin.top + margin.bottom).append(
+            var svg = d3.select("body").append("svg").attr("id", "lineplot_svg_id").attr("xmlns", "http://www.w3.org/2000/svg")
+            		.attr("width", width + margin.left + margin.right).attr("height", height + margin.top + margin.bottom).append(
                     "g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
             
             // load data
@@ -204,17 +210,26 @@ $(document).ready(
 
 var testcontroler =  function() {
     
+	// pause data update
+	allowDataUpdate = false;
+	
     var svg = $("#lineplot_svg_id").get(0);
 	console.log("hit.");
 	
     // Extract the data as SVG text string
-	var serializer = new XMLSerializer ();
+	var serializer = new XMLSerializer();
     var svg_xml = serializer.serializeToString(svg);
-    console.log(svg_xml);
     
     // Submit the <FORM> to the server.
     // The result will be an attachment file to download.
     var form = $("#svgform"); 
-    form['data'].value = svg_xml ;
+    $("#svgxml_data").val(svg_xml);
+    console.log($("#svgxml_data").val());
+    
+//    form['returnpage'].value="http://localhost:8080/itchart-prototype/pages/d3_lineplot.html";
+    
     form.submit();
+    
+    // resume data update
+    allowDataUpdate = true;
 }
