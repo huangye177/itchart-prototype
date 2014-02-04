@@ -188,7 +188,7 @@ $(document).ready(
                 svg.append("path").attr("id", "path-id").datum(initialData).attr("class", "line").attr("d", line);
                 
                 // on-click event
-                d3.select("#singleseries_lineplot_controller").on("click", function()
+                d3.select("#convert").on("click", function()
                 {
                 	testcontroler();
                 });
@@ -203,5 +203,18 @@ $(document).ready(
         });
 
 var testcontroler =  function() {
+    
+    var svg = $("#lineplot_svg_id").get(0);
 	console.log("hit.");
+	
+    // Extract the data as SVG text string
+	var serializer = new XMLSerializer ();
+    var svg_xml = serializer.serializeToString(svg);
+    console.log(svg_xml);
+    
+    // Submit the <FORM> to the server.
+    // The result will be an attachment file to download.
+    var form = $("#svgform"); 
+    form['data'].value = svg_xml ;
+    form.submit();
 }

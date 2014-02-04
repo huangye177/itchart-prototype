@@ -1,10 +1,14 @@
 package org.itc.controller;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
+
+import javax.servlet.ServletInputStream;
+import javax.servlet.http.HttpServletRequest;
 
 import org.itc.model.BarPlotModel;
 import org.itc.model.BarPlotPointModel;
@@ -33,6 +37,26 @@ public class ChartController
     private String STRAIN_GAUGE = "StrainGauge";
     private String FORCE = "Force";
     private String PRESSURE = "Pressure-B";
+
+    // general chart convert
+    @SuppressWarnings("unused")
+    @RequestMapping(value = "/chart/convert", method = RequestMethod.POST)
+    public void convertSVGtoPDF(HttpServletRequest request)
+    {
+        try
+        {
+            ServletInputStream sis = request.getInputStream();
+            System.out.println(sis);
+        }
+        catch (IOException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        // return "/chart/lineplot";
+    }
+
+    // bar plot chart
 
     @RequestMapping(value = "/chart/barplot", method = RequestMethod.GET)
     public @ResponseBody
@@ -358,7 +382,7 @@ public class ChartController
         return multiDSPlot;
 
     }
-    
+
     // Multi-Axis Multi-Series LinePlot
 
     @RequestMapping(value = "/chart/multiaxisserieslineplot", method = RequestMethod.GET)
