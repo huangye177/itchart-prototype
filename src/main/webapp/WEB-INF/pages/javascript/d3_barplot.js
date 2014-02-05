@@ -15,7 +15,7 @@ var yScale;
 var sortOrder = false;
 
 //identification of SVG
-var svg = d3.select("body").append("svg").attr("width", w).attr("height", h);
+var svg = d3.select("body").append("svg").attr("width", w).attr("height", h).attr("id", "barplot_svg_id").attr("xmlns", "http://www.w3.org/2000/svg");
 
 
 // prepare for key and scale
@@ -246,7 +246,7 @@ $(document).ready(function()
         });
         
         // create SVG Bar
-        svg = d3.select("body").append("svg").attr("width", w).attr("height", h);
+        svg = d3.select("body").append("svg").attr("width", w).attr("height", h).attr("id", "barplot_svg_id").attr("xmlns", "http://www.w3.org/2000/svg");
 
         // create bars
         svg.selectAll("rect").data(dataset, key).enter().append("rect")
@@ -316,6 +316,12 @@ $(document).ready(function()
             refreshBarData();
         });
         
+        // on-click event
+        d3.select("#convert").on("click", function()
+        {
+            convertSVG2PDF();
+        });
+        
         // load footer
         $.getScript("javascript/d3_test_footer.js");
         
@@ -326,3 +332,34 @@ $(document).ready(function()
     // ---------------- end of JQuery ready ----------------
 
 });
+
+var convertSVG2PDF =  function() {
+    
+    $.get("css/d3_barplot.css",function(data, status){
+        var svg_css = data.replace(/\n/g, "");
+        
+        // the CSS used here is special for the batik CSSEngine, therefore need to reset it
+        var svg_css = "";
+        
+        // pause data update
+        allowDataUpdate = false;
+        
+        var svg = $("#barplot_svg_id").get(0);
+        
+        // Extract the data as SVG text string
+        var serializer = new XMLSerializer();
+        var svg_xml = serializer.serializeToString(svg);
+        
+        // Submit the <FORM> to the server.
+        // The result will be an attachment file to download.
+        var form = $("#svgform"); 
+        $("#svgxml_data").val(svg_xml);
+        $("#svgxml_css").val(svg_css);
+        
+        form.submit();
+        
+        // resume data update
+        allowDataUpdate = true;
+      });
+    
+}

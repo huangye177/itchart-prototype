@@ -1,0 +1,31 @@
+.x.axis path {
+  /* display: none; */
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+.axis path {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+    
+}
+
+.axis line {
+    stroke: lightgrey;
+    opacity: 0.7;
+    /* display: none; */ 
+}
+
+.axis text {
+    font-family: sans-serif;
+    font-size: 11px;
+}
+
+svg text {
+        pointer-events: none;
+}

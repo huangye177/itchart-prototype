@@ -10,9 +10,7 @@
 
 <script type="text/javascript" src="javascript/d3_barplot.js"></script>
 
-
-
-<link rel="stylesheet" type="text/css" href="css/d3_test.css"></link>
+<link rel="stylesheet" type="text/css" href="css/d3_barplot.css"></link>
 
 
 <title>Bar Plot (D3)</title>
@@ -37,6 +35,12 @@
 
 <p><a href="../chart/barplot/update/UP_LIMIT">Update Data API</a></p>
 
+<form id="svgform" method="post" action="../chart/convert2pdf">
+ <input type="hidden" id="svgchartid" name="svgchartid" value="lineplot">
+ <input type="hidden" id="svgxml_data" name="svgxml_data" >
+ <input type="hidden" id="svgxml_css" name="svgxml_css" >
+ <button type="button" id="convert">Convert2PDF!</button>
+</form>
 
 <br></br>
 

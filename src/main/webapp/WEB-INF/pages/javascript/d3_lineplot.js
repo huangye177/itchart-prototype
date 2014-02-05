@@ -196,7 +196,7 @@ $(document).ready(
                 // on-click event
                 d3.select("#convert").on("click", function()
                 {
-                	testcontroler();
+                    convertSVG2PDF();
                 });
                 
                 // load footer
@@ -208,28 +208,30 @@ $(document).ready(
 
         });
 
-var testcontroler =  function() {
+var convertSVG2PDF =  function() {
     
-	// pause data update
-	allowDataUpdate = false;
-	
-    var svg = $("#lineplot_svg_id").get(0);
-	console.log("hit.");
-	
-    // Extract the data as SVG text string
-	var serializer = new XMLSerializer();
-    var svg_xml = serializer.serializeToString(svg);
+    $.get("css/d3_lineplot.css",function(data, status){
+        var svg_css = data.replace(/\n/g, "");
+        
+        // pause data update
+        allowDataUpdate = false;
+        
+        var svg = $("#lineplot_svg_id").get(0);
+        
+        // Extract the data as SVG text string
+        var serializer = new XMLSerializer();
+        var svg_xml = serializer.serializeToString(svg);
+        
+        // Submit the <FORM> to the server.
+        // The result will be an attachment file to download.
+        var form = $("#svgform"); 
+        $("#svgxml_data").val(svg_xml);
+        $("#svgxml_css").val(svg_css);
+        
+        form.submit();
+        
+        // resume data update
+        allowDataUpdate = true;
+      });
     
-    // Submit the <FORM> to the server.
-    // The result will be an attachment file to download.
-    var form = $("#svgform"); 
-    $("#svgxml_data").val(svg_xml);
-    console.log($("#svgxml_data").val());
-    
-//    form['returnpage'].value="http://localhost:8080/itchart-prototype/pages/d3_lineplot.html";
-    
-    form.submit();
-    
-    // resume data update
-    allowDataUpdate = true;
 }
