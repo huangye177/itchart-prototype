@@ -1,23 +1,45 @@
-itchart-prototype
-=================
+# What is itchart-prototype
 
-Checkout the alpha-status by simply executing following commands in your shell:
+**itchart-prototype** is a D3-based Javascript diagram example set, which not only contains static charts but also dynamic charts. 
 
-NOITCE: please check file "gradle.properties" to enable/disable/change your proxy setting.
+## How-to 
 
-=================
+`git clone https://github.com/huangye177/itchart-prototype.git`
 
-git clone https://github.com/huangye177/itchart-prototype.git
+`cd itchart-prototype`
 
-cd itchart-prototype
+`./gradlew build`
 
-./gradlew build
-
-./gradlew jettyRunWar
-
-=================
+`./gradlew jettyRunWar`
 
 Now you can visit "http://localhost:8080/itchart-prototype" on your own browser!
 
-Have fun!
+=================
 
+Proxy Setting
+------
+> NOITCE: please check file "gradle.properties" to enable/disable/change your proxy setting if needed
+
+## Included Chart types
+
+* Barplot (D3)
+
+* Single-Series Lineplot (D3)
+
+* Single-Series Bivariate Lineplot (D3)
+
+* Multi-Series Lineplot (D3)
+
+* Multi-Axis Multi-Series Lineplot (D3)
+
+* Scatterplot (D3)
+
+* Multi-Series Lineplot (D3 out-dated)
+
+* ScatterChart (D3 + NVD)
+
+* lineWithFocusChart (D3 + NVD)
+
+Additional function:
+
+* SVG to PDF convertion (in Barplot and Single-Series Lineplot)
