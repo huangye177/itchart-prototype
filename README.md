@@ -22,6 +22,8 @@ Proxy Setting
 
 ## Included Chart types
 
+Chart types:
+
 * Barplot (D3)
 
 * Single-Series Lineplot (D3)
@@ -40,6 +42,6 @@ Proxy Setting
 
 * lineWithFocusChart (D3 + NVD)
 
-Additional function:
+Additional functions:
 
 * SVG to PDF convertion (in Barplot and Single-Series Lineplot)
